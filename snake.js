@@ -8,8 +8,6 @@ var gameStart = false;
 var gamePause = false;
 var context = canvas.getContext("2d");
 var grid = 16;
-var direction = "right";
-var prevDirection = "right";
 var score = 0;
 var speed = 200;
 var increment = 4;
@@ -35,7 +33,9 @@ function getSnakeObj() {
     return {
       x: 160,
       y: 160,
-      cells: [{ x: 160, y: 160 }, { x: 160 - grid, y: 160 }]
+      cells: [{ x: 160, y: 160 }, { x: 160 - grid, y: 160 }],
+      direction: "right",
+      prevDirection: "right"
     };
   }
   return JSON.parse(sessionStorage.snakeObj);
@@ -178,7 +178,7 @@ function moveSnake() {
   let dx = 0,
     dy = 0;
 
-  switch (direction) {
+  switch (snake.direction) {
     case "left":
       dx = -grid;
       break;
@@ -210,7 +210,7 @@ function autoMove() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   moveSnake();
   drawSnake();
-  prevDirection = direction;
+  snake.prevDirection = snake.direction;
   if (!gameOver && !gamePause) drawfood();
   setTimeout(autoMove, speed);
 }
@@ -222,26 +222,28 @@ document.addEventListener("keydown", function(e) {
       gameStart = true;
       break;
     case 100:
-      if (prevDirection != "right" && prevDirection != "left")
-        direction = "left";
+      if (snake.prevDirection != "right" && snake.prevDirection != "left")
+        snake.direction = "left";
       break;
     case 104:
-      if (prevDirection != "down" && prevDirection != "up") direction = "up";
+      if (snake.prevDirection != "down" && snake.prevDirection != "up")
+        snake.direction = "up";
       break;
     case 102:
-      if (prevDirection != "left" && prevDirection != "right")
-        direction = "right";
+      if (snake.prevDirection != "left" && snake.prevDirection != "right")
+        snake.direction = "right";
       break;
     case 101:
-      if (prevDirection != "up" && prevDirection != "down") direction = "down";
+      if (snake.prevDirection != "up" && snake.prevDirection != "down")
+        snake.direction = "down";
       break;
     case 80:
-      if (gamePause == false && gameStart) {
+      if (gamePause == false) {
         gamePause = true;
         pauseGame();
         break;
       }
-      if (gamePause == true && gameStart) {
+      if (gamePause == true) {
         gamePause = false;
         resumeGame();
       }
@@ -261,23 +263,26 @@ activeRegion.bind(canvas, "swipe", function(e) {
     e.detail.data[0].currentDirection > 135 &&
     e.detail.data[0].currentDirection < 225
   )
-    if (prevDirection != "right" && prevDirection != "left") direction = "left";
+    if (snake.prevDirection != "right" && snake.prevDirection != "left")
+      snake.direction = "left";
   if (
     e.detail.data[0].currentDirection > 45 &&
     e.detail.data[0].currentDirection < 135
   )
-    if (prevDirection != "down" && prevDirection != "up") direction = "up";
+    if (snake.prevDirection != "down" && snake.prevDirection != "up")
+      snake.direction = "up";
   if (
     (e.detail.data[0].currentDirection > 315 &&
       e.detail.data[0].currentDirection <= 360) ||
     (e.detail.data[0].currentDirection > 45 &&
       e.detail.data[0].currentDirection <= 0)
   )
-    if (prevDirection != "left" && prevDirection != "right")
-      direction = "right";
+    if (snake.prevDirection != "left" && snake.prevDirection != "right")
+      snake.direction = "right";
   if (
     e.detail.data[0].currentDirection > 225 &&
     e.detail.data[0].currentDirection < 315
   )
-    if (prevDirection != "up" && prevDirection != "down") direction = "down";
+    if (snake.prevDirection != "up" && snake.prevDirection != "down")
+      snake.direction = "down";
 });
