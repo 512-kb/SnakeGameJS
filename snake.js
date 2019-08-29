@@ -8,12 +8,13 @@ var gameStart = false;
 var gamePause = false;
 var context = canvas.getContext("2d");
 var grid = 16;
-var score = 0;
 var speed = 200;
 var increment = 4;
+var snake = getSnakeObj();
+var food = getfood();
 
 divHighScore.innerHTML = "HIGH SCORE : " + HighScore;
-divScore.innerHTML = "YOUR SCORE: " + score;
+divScore.innerHTML = "YOUR SCORE: " + (snake.cells.length - 2);
 context.fillStyle = "#23ebc3";
 context.textAlign = "center";
 context.font = "30px Trebuchet MS";
@@ -23,9 +24,6 @@ context.fillText(
   canvas.height / 2
 );
 
-var snake = getSnakeObj();
-
-var food = getfood();
 if (food.x == -5 && food.x == -5) updatefoodPosition();
 
 function getSnakeObj() {
@@ -81,8 +79,8 @@ function getHighScore() {
   return localStorage.getItem("HighScore");
 }
 
-function setHighScore(score) {
-  localStorage.setItem("HighScore", score);
+function setHighScore() {
+  localStorage.setItem("HighScore", snake.cells.length - 2);
 }
 
 function drawfood() {
@@ -107,8 +105,8 @@ function drawSnake() {
       context.fillStyle = "#23ebc3";
       context.textAlign = "center";
       context.font = "155% Trebuchet MS";
-      if (HighScore <= score) {
-        setHighScore(score);
+      if (HighScore <= snake.cells.length - 2) {
+        setHighScore();
         context.font = "30px Trebuchet MS";
         context.fillText(
           "Congratulations!",
@@ -117,13 +115,13 @@ function drawSnake() {
         );
         context.font = "20px Trebuchet MS";
         context.fillText(
-          "You've set High Score : " + score,
+          "You've set High Score : " + (snake.cells.length - 2),
           canvas.width / 2,
           canvas.height / 2 + grid
         );
       } else
         context.fillText(
-          "Game Over! Your Score : " + score,
+          "Game Over! Your Score : " + (snake.cells.length - 2),
           canvas.width / 2,
           canvas.height / 2
         );
@@ -155,11 +153,11 @@ function drawSnake() {
   if (snake.x == food.x && snake.y == food.y) {
     updatefoodPosition();
     drawfood();
-    score++;
-    divScore.innerHTML = "YOUR SCORE: " + score;
+    divScore.innerHTML = "YOUR SCORE: " + (snake.cells.length - 2);
     speed -= increment;
   }
-  if (HighScore < score) divHighScore.innerHTML = "HIGH SCORE: " + score;
+  if (HighScore < snake.cells.length - 2)
+    divHighScore.innerHTML = "HIGH SCORE: " + (snake.cells.length - 2);
 }
 
 function updatefoodPosition() {
@@ -199,8 +197,7 @@ function moveSnake() {
   snake.cells.unshift({ x: snake.x, y: snake.y }); // Insert at 0th position
   if (snake.x == food.x && snake.y == food.y) {
     updatefoodPosition();
-    score++;
-    divScore.innerHTML = "YOUR SCORE: " + score;
+    divScore.innerHTML = "YOUR SCORE: " + (snake.cells.length - 2);
     speed -= increment;
   } else snake.cells.pop(); // remove the last element
 }
