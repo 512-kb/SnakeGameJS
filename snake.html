@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        background: black;
+        display: flex;
+        color: cyan;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+      canvas {
+        border: 1px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <object>
+      <label
+        id="HighScore"
+        style="font-size:20px;text-align: right; color:#c2f5ff;"
+      ></label>
+      <label
+        id="Score"
+        style="font-size:20px;text-align: right; color:#c2f5ff; margin-left:25%; "
+      ></label
+      ><br />
+      <canvas width="400" height="400" id="game"></canvas>
+    </object>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/zingtouch/1.0.6/zingtouch.min.js"
+      integrity="sha256-Lw50ZUEj1RhtvXd8muaIWaCznWkYi9VmKDbmDCOOKnw="
+      crossorigin="anonymous"
+    ></script>
+    <script src="snake.js"></script>
+  </body>
+</html>
